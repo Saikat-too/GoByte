@@ -3,6 +3,7 @@ package lexer
 import "gobyte/token"
 
 type Lexer struct {
+	// In go it is preferable to assign bigge memory byte first than smaller one for better memory management
 	input        string
 	position     int
 	readPosition int
@@ -33,7 +34,18 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case '=':
-		tok = newToken(token.ASSIGN, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.EQ, Literal: string(ch) + string(l.ch)}
+		} else if l.peekChar() == '>' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.GTE, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = newToken(token.ASSIGN, l.ch)
+		}
+
 	case '(':
 		tok = newToken(token.LPAREN, l.ch)
 	case ')':
@@ -42,12 +54,65 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.COMMA, l.ch)
 	case '+':
 		tok = newToken(token.PLUS, l.ch)
-	case '*':
-		tok = newToken(token.MUL, l.ch)
 	case '-':
 		tok = newToken(token.MINUS, l.ch)
 	case '/':
-		tok = newToken(token.DIV, l.ch)
+		if l.peekChar() == '/' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.FLOOR, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = newToken(token.DIV, l.ch)
+		}
+	case '%':
+		tok = newToken(token.MOD, l.ch)
+	case '*':
+		if l.peekChar() == '*' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.EXP, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = newToken(token.MUL, l.ch)
+		}
+		tok = newToken(token.EXP, l.ch)
+	case '!':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.NOT_EQ, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = newToken(token.BANG, l.ch)
+		}
+
+	case '<':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.LTE, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = newToken(token.LT, l.ch)
+		}
+	case '>':
+		tok = newToken(token.GT, l.ch)
+
+	case ';':
+		tok = newToken(token.SEMICOLON, l.ch)
+
+	case ':':
+		tok = newToken(token.COLON, l.ch)
+
+	case '{':
+		tok = newToken(token.LBRACE, l.ch)
+
+	case '}':
+		tok = newToken(token.RBRACE, l.ch)
+
+	case '[':
+		tok = newToken(token.LBRACKET, l.ch)
+
+	case ']':
+		tok = newToken(token.RBRACKET, l.ch)
+
 	case 0:
 		tok.Literal = " "
 		tok.Type = token.EOF
@@ -105,4 +170,12 @@ func (l *Lexer) readNumber() string {
 
 func isDigit(ch byte) bool {
 	return ch >= '0' && ch <= '9'
+}
+
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
 }

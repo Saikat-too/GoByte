@@ -51,7 +51,8 @@ const (
 	DIV    = "/"
 	MOD    = "%"
 	EXP    = "**"
-
+	FLOOR  = "//"
+	BANG   = "!"
 	// Comparison Operators
 	EQ     = "=="
 	NOT_EQ = "!="
