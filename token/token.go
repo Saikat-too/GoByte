@@ -8,7 +8,22 @@ type Token struct {
 }
 
 var keywords = map[string]TokenType{
-	"def": DEF,
+	"def":    DEF,
+	"if":     IF,
+	"else":   ELSE,
+	"return": RETURN,
+	"true":   TRUE,
+	"false":  FALSE,
+	"for":    FOR,
+	"while":  WHILE,
+	"break":  BREAK,
+	"class":  CLASS,
+	"self":   SELF,
+	"none":   NONE,
+	"pass":   PASS,
+	"and":    AND,
+	"or":     OR,
+	"not":    NOT,
 }
 
 func LookupIdent(ident string) TokenType {
@@ -22,18 +37,55 @@ func LookupIdent(ident string) TokenType {
 const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
-	IDENT   = "IDENT"
-	INT     = "INT"
-	STRING  = "STRING"
-	ASSIGN  = "="
-	PLUS    = "+"
-	MINUS   = "-"
-	MUL     = "*"
-	DIV     = "/"
-	LPAREN  = "("
-	RPAREN  = ")"
-	COMMA   = ","
-	IF      = "if"
-	ELSE    = "else"
-	DEF     = "def"
+
+	// Identifiers
+	IDENT  = "IDENT"
+	INT    = "INT"
+	STRING = "STRING"
+
+	// Operators
+	ASSIGN = "="
+	PLUS   = "+"
+	MINUS  = "-"
+	MUL    = "*"
+	DIV    = "/"
+	MOD    = "%"
+	EXP    = "**"
+
+	// Comparison Operators
+	EQ     = "=="
+	NOT_EQ = "!="
+	LT     = "<"
+	GT     = ">"
+	LTE    = "<="
+	GTE    = "=>"
+
+	// Delimiters
+	SEMICOLON = ";"
+	LPAREN    = "("
+	RPAREN    = ")"
+	COMMA     = ","
+	COLON     = ":"
+	LBRACE    = "{"
+	RBRACE    = "}"
+	LBRACKET  = "["
+	RBRACKET  = "]"
+
+	// Keywords
+	IF     = "if"
+	ELSE   = "else"
+	DEF    = "def"
+	RETURN = "return"
+	TRUE   = "true"
+	FALSE  = "false"
+	FOR    = "for"
+	WHILE  = "while"
+	BREAK  = "break"
+	CLASS  = "class"
+	SELF   = "self"
+	AND    = "and"
+	OR     = "or"
+	NOT    = "not"
+	NONE   = "none"
+	PASS   = "pass"
 )
